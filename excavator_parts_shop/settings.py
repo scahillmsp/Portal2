@@ -13,7 +13,7 @@ SECRET_KEY = 'your-very-secret-key-here'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False  # Change to False in production
 
-ALLOWED_HOSTS = ['portal2-54ot.onrender.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['portal2-54ot.onrender.com', 'portal.msplantspares.ie', '127.0.0.1']
 
 # Application definition
 INSTALLED_APPS = [
