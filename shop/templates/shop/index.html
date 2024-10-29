@@ -1,0 +1,117 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h2>Excavator Parts</h2>
+
+    <!-- Search Form for OEM Number, Part Number, or Description -->
+    <form method="GET" action="{% url 'index' %}">
+        <label for="query">Search:</label>
+        <input type="text" name="query" id="query" placeholder="OEM Number, Part Number, or Description">
+        <button type="submit">Search</button>
+    </form>
+
+    <!-- Search Form with Dynamic Dropdowns -->
+    <form method="GET" action="{% url 'index' %}">
+        <!-- Category Dropdown -->
+        <label for="category">Category:</label>
+        <select name="category" id="category">
+            <option value="">All Categories</option>
+            {% for category in categories %}
+                <option value="{{ category }}">{{ category }}</option>
+            {% endfor %}
+        </select>
+
+        <!-- Make Dropdown -->
+        <label for="make">Make:</label>
+        <select name="make" id="make">
+            <option value="">Select Make</option>
+        </select>
+
+        <!-- Model Dropdown -->
+        <label for="model">Model:</label>
+        <select name="model" id="model">
+            <option value="">Select Model</option>
+        </select>
+
+        <!-- Version Dropdown -->
+        <label for="version">Version:</label>
+        <select name="version" id="version">
+            <option value="">Select Version</option>
+        </select>
+
+        <button type="submit">Search</button>
+    </form>
+
+    <!-- Product List -->
+    {% if products %}
+        <ul>
+            {% for product in products %}
+                <li>
+                    <a href="{% url 'product_detail' product.id %}">{{ product.header }}</a>
+                    <p>Part Number: {{ product.part_number }}</p>
+                    <p>Price: €{{ product.price }}</p>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No products to display. Please use the search above.</p>
+    {% endif %}
+
+    <!-- jQuery for AJAX -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            // Load makes based on selected category
+            $('#category').change(function() {
+                var category = $(this).val();
+                $.ajax({
+                    url: "{% url 'ajax_load_options' %}",
+                    data: { 'category': category },
+                    success: function(data) {
+                        $('#make').html('<option value="">Select Make</option>');
+                        $.each(data.makes, function(key, value) {
+                            $('#make').append('<option value="' + value + '">' + value + '</option>');
+                        });
+                        $('#model').html('<option value="">Select Model</option>');
+                        $('#version').html('<option value="">Select Version</option>');
+                    }
+                });
+            });
+
+            // Load models based on selected make
+            $('#make').change(function() {
+                var category = $('#category').val();
+                var make = $(this).val();
+                $.ajax({
+                    url: "{% url 'ajax_load_options' %}",
+                    data: { 'category': category, 'make': make },
+                    success: function(data) {
+                        $('#model').html('<option value="">Select Model</option>');
+                        $.each(data.models, function(key, value) {
+                            $('#model').append('<option value="' + value + '">' + value + '</option>');
+                        });
+                        $('#version').html('<option value="">Select Version</option>');
+                    }
+                });
+            });
+
+            // Load versions based on selected model
+            $('#model').change(function() {
+                var category = $('#category').val();
+                var make = $('#make').val();
+                var model = $(this).val();
+                $.ajax({
+                    url: "{% url 'ajax_load_options' %}",
+                    data: { 'category': category, 'make': make, 'model': model },
+                    success: function(data) {
+                        $('#version').html('<option value="">Select Version</option>');
+                        $.each(data.versions, function(key, value) {
+                            $('#version').append('<option value="' + value + '">' + value + '</option>');
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}
+

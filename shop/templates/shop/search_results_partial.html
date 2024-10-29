@@ -1,0 +1,12 @@
+{% for product in products %}
+    <div>
+        <a href="{% url 'product_detail' product.id %}">
+            {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.header }}">
+            {% else %}
+                <img src="{% static 'images/logo.png' %}" alt="Default image">
+            {% endif %}
+            <h2>{{ product.header }}</h2>
+        </a>
+    </div>
+{% endfor %}

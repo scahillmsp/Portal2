@@ -1,0 +1,17 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h2>Invoice for Order #{{ invoice.order.order_number }}</h2>
+    <p>Date: {{ invoice.created_at }}</p>
+    <p>Customer: {{ invoice.order.customer.name }}</p>
+    <p>Shipping Address: {{ invoice.order.shipping_address }}</p>
+
+    <h3>Products Ordered:</h3>
+    <ul>
+        {% for product in invoice.order.products.all %}
+            <li>{{ product.header }} - €{{ product.price }} x {{ invoice.order.products.get(id=product.id).quantity }}</li>
+        {% endfor %}
+    </ul>
+
+    <h3>Total Price: €{{ invoice.total_price }}</h3>
+{% endblock %}

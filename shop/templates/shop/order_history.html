@@ -1,0 +1,21 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h2>Order History</h2>
+    {% if orders %}
+        <ul>
+            {% for order in orders %}
+                <li>
+                    <strong>Order #{{ order.order_number }}</strong> - ${{ order.total_price }} - {{ order.created_at }}
+                    <ul>
+                        {% for product in order.products.all %}
+                            <li>{{ product.header }} x {{ product.quantity }}</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No past orders found.</p>
+    {% endif %}
+{% endblock %}

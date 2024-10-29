@@ -1,0 +1,32 @@
+{% extends "base_generic.html" %}
+{% load static %}
+
+{% block content %}
+    <h2>{{ product.header }}</h2>
+    <div class="product-gallery">
+        {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.header }}" class="product-image">
+        {% else %}
+            <img src="{% static 'images/logo.png' %}" alt="Placeholder Image" class="product-image">
+        {% endif %}
+    </div>
+    <p>Part Number: {{ product.part_number }}</p>
+    <p>Description: {{ product.description }}</p>
+    <p>Price: €{{ product.price }}</p>
+    <p>Stock: {{ product.stock }}</p>
+    <p>OEM Number: {{ product.oem_number }}</p>
+    <p>Cross Reference Numbers: {{ product.cross_reference_numbers }}</p>
+    <form action="{% url 'add_to_cart' product.id %}" method="post">
+        {% csrf_token %}
+        <label for="quantity">Quantity:</label>
+        <input type="number" name="quantity" value="1" min="1" max="{{ product.stock }}">
+        <button type="submit">Add to Cart</button>
+    </form>
+    <h3>Related Parts</h3>
+    <ul>
+        {% for related_product in related_products %}
+            <li><a href="{% url 'product_detail' related_product.id %}">{{ related_product.header }}</a></li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'index' %}">Back to search</a>
+{% endblock %}

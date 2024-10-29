@@ -1,0 +1,8 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h2>Order Confirmation</h2>
+    <p>Thank you for your order! Your order number is {{ order.id }}.</p>
+    <p>Total Price: €{{ order.total_price }}</p>
+    <a href="{% url 'index' %}">Return to Home</a>
+{% endblock %}
