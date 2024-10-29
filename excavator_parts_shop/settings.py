@@ -13,7 +13,7 @@ SECRET_KEY = 'your-very-secret-key-here'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True  # Change to False in production
 
-ALLOWED_HOSTS = []  # Add your production domain or IP here
+ALLOWED_HOSTS = ['portal2-54ot.onrender.com', 'localhost', '127.0.0.1']
 
 # Application definition
 INSTALLED_APPS = [
