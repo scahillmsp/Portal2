@@ -8,8 +8,7 @@ environ.Env.read_env()  # Load environment variables from .env
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = env("SECRET_KEY", default="your-very-secret-key")
-DEBUG = env.bool("DEBUG", default=False)
-
+DEBUG = True
 ALLOWED_HOSTS = ['portal2-54ot.onrender.com', 'portal.msplantspares.ie', '127.0.0.1']
 
 INSTALLED_APPS = [
@@ -42,7 +41,7 @@ ROOT_URLCONF = 'excavator_parts_shop.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': [BASE_DIR / 'shop' / 'templates' / 'shop'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -105,6 +104,10 @@ else:
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/'  # Redirect after successful login
+LOGOUT_REDIRECT_URL = '/login/'  # Redirect to login page after logout
 
 # Debugging internal IPs for development
 if DEBUG:

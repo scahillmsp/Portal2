@@ -1,3 +1,4 @@
+<!-- templates/base_generic.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,7 +8,6 @@
     
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-
 </head>
 <body>
     <header>
@@ -15,18 +15,20 @@
             <img src="{% static 'images/logo.png' %}" alt="M&S Plant Spares">
         </div>
         <h1>M&S Plant Spares</h1>
-        <div class="welcome-message">
-            Welcome, {{ customer_name }}
-        </div>
         <nav>
             <a href="{% url 'index' %}">Home</a>
             <a href="{% url 'cart' %}">View Cart</a>
-            <div class="logout-container">
-                <form method="post" action="{% url 'logout' %}">
-                    {% csrf_token %}
-                    <button type="submit">Logout</button>
-                </form>
-            </div>
+            {% if user.is_authenticated %}
+                <span>Welcome, {{ user.username }}</span>
+                <div class="logout-container">
+                    <form method="post" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button type="submit">Logout</button>
+                    </form>
+                </div>
+            {% else %}
+                <a href="{% url 'login' %}">Login</a>
+            {% endif %}
         </nav>
     </header>
     <main>
