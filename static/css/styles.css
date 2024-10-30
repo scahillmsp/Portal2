@@ -12,34 +12,41 @@ body {
     line-height: 1.6;
 }
 
-/* Layout Styles */
+/* Header Styles */
 header {
     background-color: #333;
     color: #fff;
-    padding: 10px 20px;
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     position: sticky;
     top: 0;
     z-index: 1000;
 }
 
 header h1 {
-    margin: 0;
     font-size: 24px;
+    margin: 0;
+}
+
+.logo img {
+    height: 45px;
+    width: auto;
+    margin-right: 15px;
 }
 
 header nav {
-    display: flex; /* Use flexbox for layout */
-    justify-content: space-between; /* Space out nav items */
-    align-items: center; /* Center items vertically */
-    margin-top: 10px;
+    display: flex;
+    gap: 15px;
+    align-items: center;
 }
 
 header nav a {
     color: #fff;
     text-decoration: none;
-    margin: 0 15px;
-    font-size: 16px;
-    padding: 8px 10px; /* Adjusted padding for a sleeker look */
+    font-size: 15px;
+    padding: 8px 10px;
     border-radius: 4px;
     transition: background-color 0.3s ease;
 }
@@ -49,30 +56,25 @@ header nav a:hover {
 }
 
 .logout-container {
-    margin-left: auto; /* Push logout button to the right */
+    margin-left: auto;
 }
 
-.logout {
-    background-color: #FF6600; /* Button color */
+button.logout {
+    background-color: #FF6600;
     color: #fff;
-    border: none; /* Remove border */
-    border-radius: 4px; /* Rounded corners */
-    cursor: pointer; /* Pointer on hover */
-    padding: 3px 8px; /* Smaller padding for a sleeker look */
-    font-size: 14px; /* Adjust font size */
-    transition: background-color 0.3s ease; /* Smooth hover effect */
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
 }
 
-.logout:hover {
-    background-color: #cc5200; /* Darker shade on hover */
+button.logout:hover {
+    background-color: #cc5200;
 }
 
-.logo img {
-    height: 50px;
-    width: auto;
-    margin-bottom: 10px;
-}
-
+/* Main and Layout Styles */
 main {
     padding: 20px;
     max-width: 1200px;
@@ -107,7 +109,7 @@ ul li a {
 }
 
 ul li a:hover {
-    color: #FF6600; /* Matching the orange color from the logo */
+    color: #FF6600;
 }
 
 ul li p {
@@ -128,7 +130,7 @@ button {
 }
 
 button:hover {
-    background-color: #cc5200; /* Darker shade of orange for hover */
+    background-color: #cc5200;
 }
 
 /* Form Styles */
@@ -154,27 +156,31 @@ form button {
 }
 
 /* Footer Styles */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex: 1;
+}
+
 footer {
     background-color: #333;
     color: #fff;
     text-align: center;
     padding: 20px;
-    margin-top: 30px;
-    position: relative;
-    bottom: 0;
     width: 100%;
-}
-
-footer p {
-    margin: 0;
+    margin-top: auto;
 }
 
 /* Product Image Styles */
 .product-gallery img {
-    max-width: 300px; /* Limits width */
-    max-height: 300px; /* Limits height */
-    width: auto;       /* Adjusts width to maintain aspect ratio */
-    height: auto;      /* Adjusts height to maintain aspect ratio */
+    max-width: 300px;
+    max-height: 300px;
+    width: auto;
+    height: auto;
 }
 
 /* Responsive Design */

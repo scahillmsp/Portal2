@@ -1,0 +1,110 @@
+/* General resets */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+header {
+    background: #0a74da;
+    padding: 15px;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header .logo img {
+    max-height: 60px;
+}
+
+header h1 {
+    font-size: 24px;
+    color: white;
+}
+
+header nav a, header nav button {
+    color: white;
+    margin-right: 15px;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+main {
+    display: flex;
+    margin-top: 20px;
+}
+
+/* Search Section */
+.search-section {
+    flex: 1;
+    background: #0a74da;
+    color: white;
+    padding: 30px;
+    text-align: center;
+}
+
+.search-section h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+.search-section form {
+    margin: 20px 0;
+    padding: 15px;
+    background: #fff;
+    border-radius: 5px;
+    color: #333;
+}
+
+.search-section input[type="text"], .search-section select {
+    width: 75%;
+    padding: 10px;
+    font-size: 16px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.search-section button {
+    padding: 10px 20px;
+    background: #f9b700;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    color: #333;
+}
+
+/* Product List */
+.product-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.product-list li {
+    background: #fff;
+    margin: 10px 0;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.product-list li p {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #666;
+}
+
+footer {
+    padding: 15px;
+    text-align: center;
+    background: #f5f5f5;
+    color: #666;
+}
