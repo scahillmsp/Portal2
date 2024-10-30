@@ -3,8 +3,19 @@ from django.http import JsonResponse
 from django.db.models import Q
 from .models import Product, Vehicle, Order, Customer
 from django.contrib.auth.decorators import login_required
+from decimal import Decimal
+from .models import Invoice
+import uuid
+
+# Function to generate a unique order number
+def generate_unique_order_number():
+    while True:
+        order_number = str(uuid.uuid4())
+        if not Order.objects.filter(order_number=order_number).exists():
+            return order_number
 
 # Main index view for displaying search form and results
+@login_required
 def index(request):
     categories = Vehicle.objects.values_list('category', flat=True).distinct()
     products = Product.objects.none()  # No products initially displayed
@@ -37,6 +48,31 @@ def index(request):
         'products': products,
         'categories': categories,
     })
+
+@login_required
+def place_order(request):
+    if request.method == 'POST':
+        customer = Customer.objects.get(user=request.user)
+        cart = request.session.get('cart', {})
+        
+        if not cart:
+            return redirect('cart')  # Redirect if the cart is empty
+
+        products = Product.objects.filter(id__in=cart.keys())
+        total_price = sum(product.price * cart[str(product.id)] for product in products)
+        
+        # Generate a unique order number
+        order_number = generate_unique_order_number()  # Use the function to create a unique identifier
+
+        order = Order.objects.create(customer=customer, total_price=total_price, order_number=order_number)
+        for product in products:
+            order.products.add(product)
+
+        order.save()
+        request.session['cart'] = {}  # Clear the cart after order
+        return redirect('order_confirmation', order_id=order.id)
+
+    return redirect('cart')  # Redirect to cart if not POST
 
 # Load options for dynamic dropdown filtering
 def load_options(request):
@@ -84,16 +120,35 @@ def add_to_cart(request, product_id):
 def cart_view(request):
     cart = request.session.get('cart', {})
     products = Product.objects.filter(id__in=cart.keys())
+    customer = Customer.objects.get(user=request.user)
+    vat_rate = Decimal('0.23') if not customer.vat_exempt else Decimal('0')  # Use Decimal for VAT
+
     cart_items = []
-    total_price = 0
+    total_price = Decimal('0.00')  # Use Decimal for total_price
     for product in products:
         quantity = cart[str(product.id)]
-        total_price += product.price * quantity
-        cart_items.append({'product': product, 'quantity': quantity})
+        product_price = product.price * (1 + vat_rate)  # Both are Decimal now
+        total_price += product_price * quantity
+        cart_items.append({'product': product, 'quantity': quantity, 'price_with_vat': product_price})
+
     return render(request, 'shop/cart.html', {
         'cart_items': cart_items,
         'total_price': total_price,
     })
+
+@login_required
+def update_cart(request, product_id):
+    if request.method == 'POST':
+        cart = request.session.get('cart', {})
+        quantity = int(request.POST.get('quantity', 1))
+        
+        if quantity > 0:
+            cart[str(product_id)] = quantity
+        else:
+            cart.pop(str(product_id), None)  # Remove item if quantity is 0
+
+        request.session['cart'] = cart
+    return redirect('cart')
 
 # Checkout view
 @login_required
@@ -105,13 +160,21 @@ def checkout(request):
             return redirect('cart')
         products = Product.objects.filter(id__in=cart.keys())
         total_price = sum(product.price * cart[str(product.id)] for product in products)
-        order = Order.objects.create(customer=customer, total_price=total_price)
+        order_number = generate_unique_order_number()  # Use the function to create a unique identifier
+        order = Order.objects.create(customer=customer, total_price=total_price, order_number=order_number)
         for product in products:
             order.products.add(product)
         order.save()
         request.session['cart'] = {}
         return redirect('order_confirmation', order_id=order.id)
     return render(request, 'shop/checkout.html')
+
+@login_required
+def remove_from_cart(request, product_id):
+    cart = request.session.get('cart', {})
+    cart.pop(str(product_id), None)  # Remove item if it exists
+    request.session['cart'] = cart
+    return redirect('cart')
 
 # Order confirmation view
 @login_required
@@ -124,3 +187,7 @@ def order_confirmation(request, order_id):
 def order_history(request):
     orders = Order.objects.filter(customer__user=request.user).order_by('-created_at')
     return render(request, 'shop/order_history.html', {'orders': orders})
+
+def invoice_view(request, order_id):
+    invoice = get_object_or_404(Invoice, order__id=order_id)
+    return render(request, 'shop/invoice.html', {'invoice': invoice})

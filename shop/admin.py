@@ -3,9 +3,8 @@ from .models import Product, Vehicle, Customer, Order, Invoice
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    # Updated to use valid fields from the Product model
-    list_display = ['header', 'oem_number', 'price', 'stock']  # Use 'header' instead of 'name'
-    search_fields = ['header', 'oem_number']  # Use 'header' instead of 'name'
+    list_display = ['header', 'oem_number', 'price', 'stock']
+    search_fields = ['header', 'oem_number']
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
@@ -19,11 +18,8 @@ class OrderAdmin(admin.ModelAdmin):
 
 @admin.register(Customer)
 class CustomerAdmin(admin.ModelAdmin):
-    list_display = ['name', 'vat_exempt']  # Add VAT exemption status
-    list_filter = ['vat_exempt']  # Allows filtering by VAT status
-
-from django.contrib import admin
-from .models import Order
+    list_display = ['name', 'vat_exempt']
+    list_filter = ['vat_exempt']
 
 @admin.register(Invoice)
 class InvoiceAdmin(admin.ModelAdmin):

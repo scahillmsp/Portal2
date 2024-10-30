@@ -19,9 +19,12 @@
         <p>Total: €{{ total_price }}</p>
         <form action="{% url 'checkout' %}" method="post">
             {% csrf_token %}
-            <button type="submit">Proceed to Checkout</button>
+            <p>Ready to order?</p>
+            <button type="submit">Complete Order</button>
         </form>
+        <a href="{% url 'index' %}" class="continue-shopping-button">Continue Shopping</a>
     {% else %}
         <p>Your cart is empty.</p>
+        <a href="{% url 'index' %}" class="continue-shopping-button">Continue Shopping</a>
     {% endif %}
 {% endblock %}

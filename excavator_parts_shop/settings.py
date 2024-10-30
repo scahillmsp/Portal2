@@ -1,21 +1,31 @@
 import os
+import environ
 from pathlib import Path
+
+env = environ.Env()
+environ.Env.read_env()  # Load environment variables from .env
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = "mandsportal@gmail.com"
+EMAIL_HOST_PASSWORD = "yqhy xbws zrep rstg"
+print("EMAIL_HOST_USER:", env('EMAIL_HOST_USER', default='Not Found'))
+print("EMAIL_HOST_PASSWORD:", env('EMAIL_HOST_PASSWORD', default='Not Found'))
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'index'
 
-# Base directory of the project
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'your-very-secret-key-here'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False  # Change to False in production
+DEBUG = False
 
 ALLOWED_HOSTS = ['portal2-54ot.onrender.com', 'portal.msplantspares.ie', '127.0.0.1']
 
-# Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -23,7 +33,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'shop',  # Your custom app for the webshop
+    'shop.apps.ShopConfig'
 ]
 
 MIDDLEWARE = [
@@ -40,12 +50,11 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'excavator_parts_shop.urls'
 
-# Templates: Add the path to your template directories here
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],  # Custom template folder
-        'APP_DIRS': True,  # Looks for templates within each app
+        'DIRS': [BASE_DIR / 'templates'],
+        'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -59,7 +68,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'excavator_parts_shop.wsgi.application'
 
-# Database: Using SQLite for development, adjust for production
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -67,7 +75,6 @@ DATABASES = {
     }
 }
 
-# Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -83,29 +90,23 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# Internationalization
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-# Directory where Django will look for static files
-STATICFILES_DIRS = [BASE_DIR / 'static']  # Ensure you have this folder in your project root
+STATICFILES_DIRS = [BASE_DIR / 'static']
 
-# Media files (uploads like product images)
-MEDIA_URL = '/media/'  # Defines the base URL for media files (images)
-MEDIA_ROOT = BASE_DIR / 'media'  # Directory on the filesystem where media is stored
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
-# Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# For development debugging purposes
 if DEBUG:
     INTERNAL_IPS = ['127.0.0.1']
